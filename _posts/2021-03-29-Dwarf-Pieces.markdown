@@ -37,7 +37,7 @@ The Dwarf piece objects needed comes from evaluating a expression that is most c
 
 
 # Solution
-My solution to the problem of finding out which piece corresponds to the correct part of the variable type is to go through the type tree in the order it is stored in memory until a base type(a number, string, boolean or address) is reached.
+My solution to the first problem of finding out which piece corresponds to the correct part of the variable type is to go through the type tree in the order it is stored in memory until a base type(a number, string, boolean or address) is reached.
 Then I use the fist piece in the list of pieces I have to find the value of the base type and I remove it from the list pieces if it is not needed anymore (I explain later how I know the piece is not needed anymore).
 Then I repeat this until I have reached every base type in the tree, note that all the pieces should be used at this point and the algorithm should never run out of pieces.
 This algorithm finds which piece corresponds to the correct part of the type because the path to the base type in the tree describes what value that piece represent.
@@ -46,5 +46,7 @@ To determine if a piece is not needed any more I use attribute `size_in_bits` of
 If that attribute is empty then the piece must be the only piece and it represents the whole object, thus it should not be removed at any point. 
 But if it has a value then I will subtract it with size of the base type, if the resulting `size_in_bits` value is zero then I remove it from the list of pieces.
 
+My solution to the second problem of reading the correct value when the `location` attribute of the piece is a address is to track the offset when going down the type tree.
+The offset is given by the attribute `DW_AT_data_member_location` and is present under the `DW_TAG_member` dies, then when I read the value from a address I first add the offset to the address.
 
 This post is not finished, I am going to update it with more information.
